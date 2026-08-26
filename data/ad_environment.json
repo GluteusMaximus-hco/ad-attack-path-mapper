@@ -1,0 +1,52 @@
+{
+  "company": "Solace Logistics",
+  "nodes": [
+    { "id": "alice.reyes", "type": "user", "label": "alice.reyes", "department": "Helpdesk" },
+    { "id": "ben.tan", "type": "user", "label": "ben.tan", "department": "Helpdesk" },
+    { "id": "carla.mendoza", "type": "user", "label": "carla.mendoza", "department": "IT Support" },
+    { "id": "dennis.uy", "type": "user", "label": "dennis.uy", "department": "IT Support" },
+    { "id": "erika.lim", "type": "user", "label": "erika.lim", "department": "Finance" },
+    { "id": "felix.santos", "type": "user", "label": "felix.santos", "department": "Finance" },
+    { "id": "grace.villanueva", "type": "user", "label": "grace.villanueva", "department": "Sales" },
+    { "id": "svc_backup", "type": "user", "label": "svc_backup", "department": "Service Account" },
+    { "id": "svc_web", "type": "user", "label": "svc_web", "department": "Service Account" },
+    { "id": "administrator", "type": "user", "label": "administrator", "department": "IT" },
+
+    { "id": "Helpdesk", "type": "group", "label": "Helpdesk" },
+    { "id": "IT Support", "type": "group", "label": "IT Support" },
+    { "id": "Finance", "type": "group", "label": "Finance" },
+    { "id": "Sales", "type": "group", "label": "Sales" },
+    { "id": "Backup Operators", "type": "group", "label": "Backup Operators" },
+    { "id": "Server Admins", "type": "group", "label": "Server Admins" },
+    { "id": "Domain Admins", "type": "group", "label": "Domain Admins", "high_value": true },
+
+    { "id": "WKS-HELP-01", "type": "computer", "label": "WKS-HELP-01" },
+    { "id": "WKS-IT-02", "type": "computer", "label": "WKS-IT-02" },
+    { "id": "SRV-FILE-01", "type": "computer", "label": "SRV-FILE-01" },
+    { "id": "SRV-BACKUP-01", "type": "computer", "label": "SRV-BACKUP-01" },
+    { "id": "DC-01", "type": "computer", "label": "DC-01", "high_value": true }
+  ],
+  "edges": [
+    { "source": "alice.reyes", "target": "Helpdesk", "type": "MemberOf" },
+    { "source": "ben.tan", "target": "Helpdesk", "type": "MemberOf" },
+    { "source": "Helpdesk", "target": "WKS-HELP-01", "type": "AdminTo" },
+    { "source": "Helpdesk", "target": "svc_backup", "type": "GenericAll" },
+    { "source": "svc_backup", "target": "Backup Operators", "type": "MemberOf" },
+    { "source": "Backup Operators", "target": "DC-01", "type": "AdminTo" },
+    { "source": "DC-01", "target": "administrator", "type": "HasSession" },
+    { "source": "administrator", "target": "Domain Admins", "type": "MemberOf" },
+
+    { "source": "carla.mendoza", "target": "IT Support", "type": "MemberOf" },
+    { "source": "dennis.uy", "target": "IT Support", "type": "MemberOf" },
+    { "source": "IT Support", "target": "WKS-IT-02", "type": "AdminTo" },
+    { "source": "IT Support", "target": "SRV-FILE-01", "type": "AdminTo" },
+    { "source": "carla.mendoza", "target": "svc_web", "type": "GenericWrite" },
+    { "source": "svc_web", "target": "Server Admins", "type": "MemberOf" },
+    { "source": "Server Admins", "target": "SRV-FILE-01", "type": "AdminTo" },
+    { "source": "dennis.uy", "target": "erika.lim", "type": "ForceChangePassword" },
+
+    { "source": "erika.lim", "target": "Finance", "type": "MemberOf" },
+    { "source": "felix.santos", "target": "Finance", "type": "MemberOf" },
+    { "source": "grace.villanueva", "target": "Sales", "type": "MemberOf" }
+  ]
+}

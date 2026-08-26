@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AD Attack Path Mapper</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.9/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<div class="container">
+
+    <header>
+        <div class="brand">
+            <i class="fas fa-diagram-project"></i>
+            <div>
+                <h1>AD Attack Path Mapper</h1>
+                <p class="subtitle">{{ company }} &middot; simulated domain &middot; blue team recon</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="stats-row">
+        <div class="stat-card">
+            <span class="stat-value">{{ stats.total_users }}</span>
+            <span class="stat-label">User Accounts</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">{{ stats.total_groups }}</span>
+            <span class="stat-label">Groups</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">{{ stats.total_computers }}</span>
+            <span class="stat-label">Computers</span>
+        </div>
+        <div class="stat-card risk">
+            <span class="stat-value">{{ stats.accounts_at_risk }} / {{ stats.accounts_checked }}</span>
+            <span class="stat-label">Accounts With a Path to Domain Admin</span>
+        </div>
+    </section>
+
+    <div class="main-grid">
+
+        <!-- Left: the graph itself -->
+        <section class="panel graph-panel">
+            <div class="panel-head">
+                <h2><i class="fas fa-share-nodes"></i> Domain Map</h2>
+                <div class="legend">
+                    <span><i class="dot user"></i> User</span>
+                    <span><i class="dot group"></i> Group</span>
+                    <span><i class="dot computer"></i> Computer</span>
+                    <span><i class="dot target"></i> High Value</span>
+                </div>
+            </div>
+            <div id="networkGraph"></div>
+        </section>
+
+        <!-- Right: controls + narrative -->
+        <section class="panel control-panel">
+            <h2><i class="fas fa-user-secret"></i> Simulate a Foothold</h2>
+            <p class="panel-note">Pick an account like it's the one you just phished or cracked, then see how far it actually gets.</p>
+
+            <label for="startSelect">Starting account</label>
+            <select id="startSelect">
+                {% for u in users %}
+                <option value="{{ u }}">{{ u }}</option>
+                {% endfor %}
+            </select>
+
+            <button class="btn-find" onclick="findPath()">
+                <i class="fas fa-magnifying-glass-location"></i> Find Attack Path
+            </button>
+
+            <div id="resultArea" class="result-area">
+                <p class="result-empty">Pick an account above and find its path to Domain Admins.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Hanz Christer Ortiz</p>
+    </footer>
+
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>
