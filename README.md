@@ -39,24 +39,19 @@ environment, only 3 can actually reach Domain Admin, the rest are dead
 ends. That's intentional and realistic, most accounts in a real domain
 are perfectly safe, the interesting part is finding the few that aren't.
 
-## Install
+## Run it locally
 
-Requires Python 3.9+.
+If you'd rather run it yourself instead of using the live demo:
 
 ```bash
 cd ad-attack-path-mapper
 python -m venv venv
 venv\Scripts\activate          # Windows (or venv\Scripts\python.exe / pip.exe directly if activation is blocked)
 pip install -r requirements.txt
-```
-
-## Run
-
-```bash
 python app.py
 ```
 
-Then open **http://127.0.0.1:5001**
+Then open the local address shown in the terminal.
 
 ## Trying it out
 
