@@ -39,6 +39,11 @@ EDGE_FIXES = {
 
 
 def load_graph():
+    """Reads the AD environment JSON and builds a directed graph from it.
+
+    Returns both the networkx graph and the raw parsed data, since a few
+    places (like the dashboard) need the original node details too.
+    """
     with open(DATA_PATH) as f:
         data = json.load(f)
 
