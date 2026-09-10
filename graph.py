@@ -62,7 +62,10 @@ def find_path(G, start):
     dict shaped so the API can hand it straight to the frontend.
     """
     if start not in G:
-        return {"path_found": False, "message": f"'{start}' isn't in this AD environment."}
+        return {
+            "path_found": False,
+            "message": f"Account '{start}' wasn't found in this AD environment. Pick one from the dropdown.",
+        }
 
     try:
         path_nodes = nx.shortest_path(G, source=start, target=TARGET_NODE)
