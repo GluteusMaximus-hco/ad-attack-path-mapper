@@ -53,6 +53,10 @@ def api_path():
 def api_stats():
     return jsonify(compute_stats(GRAPH))
 
+@app.route("/health")
+def health():
+    """Simple check to confirm the server is running."""
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
