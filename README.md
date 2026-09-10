@@ -1,5 +1,9 @@
 # AD Attack Path Mapper
 
+**🔗 Live demo:** https://ad-attack-path-mapper.onrender.com
+
+_(First load may take ~50 seconds while the free server wakes up.)_
+
 A blue team tool that visualizes how an attacker could climb from a
 low-privilege account to Domain Admin inside a company's network, the
 same question professional tools like BloodHound answer against a real
@@ -25,10 +29,10 @@ between them, `MemberOf`, `AdminTo`, `GenericAll`, `GenericWrite`,
 `ForceChangePassword`, `HasSession`, the same relationship types real AD
 security tools track.
 
-Pick a starting account as if it's the one you just phished, and the tool
+Pick a starting account like it's the one you just phished, and the tool
 uses graph pathfinding (`networkx`) to find the shortest route from that
-account to the Domain Admins group. Each hop is then translated into a
-plain-English sentence with a concrete fix, not just "here's a scary graph."
+account to the Domain Admins group, then translates each hop into a plain
+English sentence and a concrete fix, not just "here's a scary graph."
 
 Not every account has a path. Out of the 9 non-admin accounts in this
 environment, only 3 can actually reach Domain Admin, the rest are dead
@@ -65,15 +69,29 @@ Then open **http://127.0.0.1:5001**
 
 ## Project structure
 
-```
 ad-attack-path-mapper/
-├── app.py                      Flask routes
-├── graph.py                    pathfinding + plain-English narrative logic
+├── app.py Flask routes
+├── graph.py pathfinding + plain-English narrative logic
 ├── data/
-│   └── ad_environment.json     the simulated company's AD structure
+│ └── ad_environment.json the simulated company's AD structure
 ├── templates/
-│   └── dashboard.html
+│ └── dashboard.html
 └── static/
-    ├── style.css                blueprint/intelligence-map theme
-    └── dashboard.js             graph rendering + path highlighting
-```
+├── style.css blueprint/intelligence-map theme
+└── dashboard.js graph rendering + path highlighting
+
+## Future Improvements
+
+- Let users upload their own AD data instead of using the built-in sample
+- Support more relationship types (e.g. RDP sessions, DCSync rights)
+- Export the discovered attack path as a report
+
+## Disclaimer
+
+This is an educational project built around a simulated Active Directory
+environment. All users, groups, and machines are made up. It's meant for
+learning how attack path analysis works, not for use against any real
+network.
+
+---
+Built by Hanz Christer Ortiz
