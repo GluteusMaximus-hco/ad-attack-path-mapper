@@ -5,6 +5,8 @@ low-privilege account to Domain Admin inside a company's network, the
 same question professional tools like BloodHound answer against a real
 Active Directory domain.
 
+![AD Attack Path Mapper dashboard](admapper.jpg)
+
 ## How it works
 
 There's no real Active Directory behind this. The environment lives in
