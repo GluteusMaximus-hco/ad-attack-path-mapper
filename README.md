@@ -62,19 +62,6 @@ Then open the local address shown in the terminal.
   **carla.mendoza**, **dennis.uy**, or **svc_web** instead, these are
   dead ends, the tool will tell you the account looks safely contained.
 
-## Project structure
-
-ad-attack-path-mapper/
-├── app.py Flask routes
-├── graph.py pathfinding + plain-English narrative logic
-├── data/
-│ └── ad_environment.json the simulated company's AD structure
-├── templates/
-│ └── dashboard.html
-└── static/
-├── style.css blueprint/intelligence-map theme
-└── dashboard.js graph rendering + path highlighting
-
 ## Future Improvements
 
 - Let users upload their own AD data instead of using the built-in sample
