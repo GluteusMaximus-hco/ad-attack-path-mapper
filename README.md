@@ -25,10 +25,10 @@ between them, `MemberOf`, `AdminTo`, `GenericAll`, `GenericWrite`,
 `ForceChangePassword`, `HasSession`, the same relationship types real AD
 security tools track.
 
-Pick a starting account like it's the one you just phished, and the tool
+Pick a starting account as if it's the one you just phished, and the tool
 uses graph pathfinding (`networkx`) to find the shortest route from that
-account to the Domain Admins group, then translates each hop into a plain
-English sentence and a concrete fix, not just "here's a scary graph."
+account to the Domain Admins group. Each hop is then translated into a
+plain-English sentence with a concrete fix, not just "here's a scary graph."
 
 Not every account has a path. Out of the 9 non-admin accounts in this
 environment, only 3 can actually reach Domain Admin, the rest are dead
