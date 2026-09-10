@@ -14,6 +14,8 @@ and then answer the exact same question this project answers: "what's
 the shortest way from here to full compromise?"
 """
 
+import os
+
 from flask import Flask, render_template, jsonify, request
 
 from graph import load_graph, find_path, compute_stats, graph_to_vis_format
@@ -59,4 +61,5 @@ def health():
     return {"status": "ok"}
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    port = int(os.environ.get("PORT", 5001))
+    app.run(debug=False, host="0.0.0.0", port=port)
