@@ -7,6 +7,15 @@ Active Directory domain.
 
 ![AD Attack Path Mapper dashboard](admapper.jpg)
 
+## Features
+
+- Interactive domain map showing users, groups, and computers as a graph
+- Shortest-path attack analysis from any account to Domain Admin
+- Plain-English breakdown of each hop in the attack chain
+- Concrete fix recommendations for every risky permission
+- Flags which accounts are exposed vs safely contained
+- Distinct blueprint-style dashboard, not a generic template
+
 ## How it works
 
 There's no real Active Directory behind this. The environment lives in
