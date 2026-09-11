@@ -160,6 +160,57 @@ select {
 }
 .btn-find:hover { background: #edb672; transform: translateY(-1px); }
 
+/* ===== ADD ACCOUNT FORM ===== */
+.add-account-box {
+    margin-top: 20px;
+    border-top: 1px solid rgba(224, 164, 88, 0.12);
+    padding-top: 16px;
+}
+.add-toggle {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed rgba(224, 164, 88, 0.35);
+    color: #e0a458;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.add-toggle:hover { background: rgba(224, 164, 88, 0.08); }
+/* collapsed until toggled open */
+.add-form {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+}
+.add-form.open { max-height: 600px; margin-top: 14px; }
+.btn-add, .btn-reset {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    cursor: pointer;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.25s;
+}
+.btn-add { background: #5b8ba0; color: #0d1b2a; }
+.btn-add:hover { background: #74a3b8; }
+.btn-reset { background: transparent; color: #8296a8; border: 1px solid rgba(130, 150, 168, 0.3); }
+.btn-reset:hover { color: #d8e1e8; border-color: #8296a8; }
+
 /* ===== RESULT AREA ===== */
 .result-area { margin-top: 20px; }
 .result-empty { font-size: 0.85rem; color: #5a6b7a; font-style: italic; text-align: center; padding: 20px 0; }
