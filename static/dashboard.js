@@ -18,7 +18,11 @@ const GROUP_COLORS = {
 
 async function loadGraph() {
     const data = await fetch("/api/graph").then(r => r.json());
+    drawGraph(data);
+}
 
+function drawGraph(data) {
+    originalNodeStyle = {};
     const nodes = data.nodes.map(n => {
         const background = n.highValue ? "#e2483d" : (GROUP_COLORS[n.group] || "#5b8ba0");
         const border = n.highValue ? "#ff8a80" : "rgba(216, 225, 232, 0.3)";
@@ -103,13 +107,36 @@ function highlightPath(nodeIds) {
     network.fit({ nodes: nodeIds, animation: { duration: 600, easingFunction: "easeInOutQuad" } });
 }
 
+// accounts the user added in the browser this session - reset on reload
+let extraAccounts = [];
+
 async function findPath() {
     const start = document.getElementById("startSelect").value;
     const resultArea = document.getElementById("resultArea");
     resultArea.innerHTML = '<p class="result-empty">Searching...</p>';
     resetHighlight();
 
-    const result = await fetch(`/api/path?start=${encodeURIComponent(start)}`).then(r => r.json());
+    let result;
+    if (extraAccounts.length) {
+        // if the user has added accounts, go through the simulate endpoint so
+        // the temporary graph (base + additions) is what gets searched
+        result = await fetch("/api/simulate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ start, extra_accounts: extraAccounts }),
+        }).then(r => r.json());
+    } else {
+        result = await fetch(`/api/path?start=${encodeURIComponent(start)}`).then(r => r.json());
+    }
+
+    renderPathResult(result);
+}
+
+// renders either the "no path / safe" message or the full path breakdown,
+// shared by both Find Attack Path and the Add Account flow
+function renderPathResult(result) {
+    const resultArea = document.getElementById("resultArea");
+    resetHighlight();
 
     if (!result.path_found) {
         resultArea.innerHTML = `
@@ -143,6 +170,70 @@ async function findPath() {
             </div>
         ` : ""}
     `;
+}
+
+// ===== ADD YOUR OWN ACCOUNT =====
+
+function toggleAddForm() {
+    document.getElementById("addForm").classList.toggle("open");
+}
+
+async function addAccount() {
+    const name = document.getElementById("newName").value.trim();
+    const group = document.getElementById("newGroup").value;
+    const perm = document.getElementById("newPerm").value;
+    const target = document.getElementById("newTarget").value;
+    const resultArea = document.getElementById("resultArea");
+
+    if (!name) {
+        resultArea.innerHTML = '<div class="result-safe"><i class="fas fa-circle-info"></i>Give the account a username first.</div>';
+        return;
+    }
+    // don't allow a name that already exists in the environment
+    if (originalNodeStyle[name] || extraAccounts.some(a => a.id === name)) {
+        resultArea.innerHTML = '<div class="result-safe"><i class="fas fa-circle-info"></i>That name is already in the environment, pick another.</div>';
+        return;
+    }
+
+    const account = { id: name, group };
+    if (perm && target) {
+        account.perm = perm;
+        account.target = target;
+    }
+    extraAccounts.push(account);
+
+    // add the new account to the starting-account dropdown and select it
+    const sel = document.getElementById("startSelect");
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    opt.dataset.added = "1";   // tag it so Reset can strip it back out
+    sel.appendChild(opt);
+    sel.value = name;
+
+    // rebuild the graph (base + all added accounts) and redraw, then run the path
+    resultArea.innerHTML = '<p class="result-empty">Adding account and checking path...</p>';
+    const result = await fetch("/api/simulate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ start: name, extra_accounts: extraAccounts }),
+    }).then(r => r.json());
+
+    drawGraph(result.graph);
+    renderPathResult(result);
+}
+
+function resetAccounts() {
+    extraAccounts = [];
+    // strip any added options back out of the dropdown
+    const sel = document.getElementById("startSelect");
+    [...sel.options].forEach(o => {
+        if (o.dataset.added) o.remove();
+    });
+    document.getElementById("newName").value = "";
+    loadGraph();
+    document.getElementById("resultArea").innerHTML =
+        '<p class="result-empty">Back to the original environment. Pick an account and find its path.</p>';
 }
 
 loadGraph();
