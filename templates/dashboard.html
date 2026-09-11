@@ -78,6 +78,49 @@
             <div id="resultArea" class="result-area">
                 <p class="result-empty">Pick an account above and find its path to Domain Admins.</p>
             </div>
+
+            <!-- add-your-own-account form: lets you drop a new user into the
+                 environment and see if it opens up a fresh path to Domain Admin.
+                 lives only in the browser, resets on reload -->
+            <div class="add-account-box">
+                <button class="add-toggle" onclick="toggleAddForm()">
+                    <i class="fas fa-user-plus"></i> Add your own account
+                </button>
+                <div id="addForm" class="add-form">
+                    <label for="newName">Username</label>
+                    <input type="text" id="newName" placeholder="e.g. intern.dev" />
+
+                    <label for="newGroup">Member of group</label>
+                    <select id="newGroup">
+                        {% for g in groups %}
+                        <option value="{{ g }}">{{ g }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="newPerm">Extra permission (optional)</label>
+                    <select id="newPerm">
+                        <option value="">None</option>
+                        <option value="GenericAll">GenericAll</option>
+                        <option value="GenericWrite">GenericWrite</option>
+                        <option value="ForceChangePassword">ForceChangePassword</option>
+                        <option value="AdminTo">AdminTo</option>
+                    </select>
+
+                    <label for="newTarget">Over which account</label>
+                    <select id="newTarget">
+                        {% for u in users %}
+                        <option value="{{ u }}">{{ u }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button class="btn-add" onclick="addAccount()">
+                        <i class="fas fa-plus"></i> Add &amp; Test Path
+                    </button>
+                    <button class="btn-reset" onclick="resetAccounts()">
+                        <i class="fas fa-rotate-left"></i> Reset
+                    </button>
+                </div>
+            </div>
         </section>
 
     </div>
