@@ -18,7 +18,7 @@ Active Directory domain.
 - Plain-English breakdown of each hop in the attack chain
 - Concrete fix recommendations for every risky permission
 - Flags which accounts are exposed vs safely contained
-- Distinct blueprint-style dashboard, not a generic template
+- Add your own account and instantly see if it opens a new path to Domain Admin
 
 ## How it works
 
@@ -56,11 +56,14 @@ Then open the local address shown in the terminal.
 ## Trying it out
 
 - Pick **alice.reyes** or **ben.tan** (Helpdesk) or **svc_backup** from
-  the dropdown and hit "Find Attack Path", you'll get a 6-hop chain
-  straight to Domain Admins, with the path highlighted on the graph.
+  the dropdown and hit "Find Attack Path", you'll get a chain straight to
+  Domain Admins, with the path highlighted on the graph.
 - Pick **erika.lim**, **felix.santos**, **grace.villanueva**,
   **carla.mendoza**, **dennis.uy**, or **svc_web** instead, these are
   dead ends, the tool will tell you the account looks safely contained.
+- Try the **Add your own account** panel: create a new user, give them a
+  risky permission like GenericAll over an existing account, and watch a
+  fresh path to Domain Admin appear. It resets when you reload.
 
 ## Future Improvements
 
@@ -74,6 +77,3 @@ This is an educational project built around a simulated Active Directory
 environment. All users, groups, and machines are made up. It's meant for
 learning how attack path analysis works, not for use against any real
 network.
-
----
-Built by Hanz Christer Ortiz
