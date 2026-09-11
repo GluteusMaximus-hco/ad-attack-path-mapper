@@ -39,21 +39,37 @@ EDGE_FIXES = {
 
 
 def load_graph():
-    """Reads the AD environment JSON and builds a directed graph from it.
-
-    Returns both the networkx graph and the raw parsed data, since a few
-    places (like the dashboard) need the original node details too.
-    """
     with open(DATA_PATH) as f:
         data = json.load(f)
+    return build_graph(data), data
 
+
+def build_graph(data, extra_accounts=None):
+    """
+    Builds the directed graph from the environment data, plus any extra
+    accounts the user added in the browser. The extras are never saved to
+    the JSON file, they only live in the graph built for this one request,
+    so the shared environment stays clean and everything resets on reload.
+    """
     G = nx.DiGraph()
     for node in data["nodes"]:
         G.add_node(node["id"], **node)
     for edge in data["edges"]:
         G.add_edge(edge["source"], edge["target"], type=edge["type"])
 
-    return G, data
+    for acct in extra_accounts or []:
+        name = acct.get("id", "").strip()
+        if not name:
+            continue
+        G.add_node(name, id=name, type="user", label=name)
+        # every added account belongs to a group...
+        if acct.get("group"):
+            G.add_edge(name, acct["group"], type="MemberOf")
+        # ...and can optionally be given one risky permission over a target
+        if acct.get("perm") and acct.get("target"):
+            G.add_edge(name, acct["target"], type=acct["perm"])
+
+    return G
 
 
 def find_path(G, start):
@@ -62,10 +78,7 @@ def find_path(G, start):
     dict shaped so the API can hand it straight to the frontend.
     """
     if start not in G:
-        return {
-            "path_found": False,
-            "message": f"Account '{start}' wasn't found in this AD environment. Pick one from the dropdown.",
-        }
+        return {"path_found": False, "message": f"'{start}' isn't in this AD environment."}
 
     try:
         path_nodes = nx.shortest_path(G, source=start, target=TARGET_NODE)
